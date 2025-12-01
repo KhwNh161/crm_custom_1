@@ -95,7 +95,7 @@ export const Task = ({
               {task.text}
             </div>
             <div className="text-sm text-muted-foreground">
-              Lịch hẹn&nbsp;
+              Lịch hẹn&nbsp;  
               <DateField source="due_date" record={task} />
               {showContact && (
                 <ReferenceField<TData, Contact>

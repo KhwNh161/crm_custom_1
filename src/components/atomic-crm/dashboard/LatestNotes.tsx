@@ -71,7 +71,7 @@ export const LatestNotes = () => {
                 ) : (
                   <Contact note={note} />
                 )}
-                , đã thêm{" "}
+                , added{" "}
                 {formatDistance(note.date, new Date(), {
                   addSuffix: true,
                 })}

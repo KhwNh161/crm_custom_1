@@ -174,7 +174,7 @@ export const AddTask = ({
                     validate={required()}
                   />
                   
-                  {/* [KHÔI PHỤC] Sử dụng taskTypes động từ Context */}
+                 
                   <SelectInput
                     source="type"
                     label="Loại"

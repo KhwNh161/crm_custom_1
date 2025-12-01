@@ -167,7 +167,7 @@ const vietnameseMessages = {
                 due_date: 'Hạn chót',          // Dịch trường Due date
                 type: 'Loại',                  // Dịch trường Type
             },
-            // Dịch các lựa chọn bên trong mục "Type" (Loại)
+            
             data: {
                 type: {
                     Email: 'Gửi Email',
