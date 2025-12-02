@@ -20,8 +20,8 @@ export const defaultCompanySectors = [
 ];
 
 export const defaultDealStages = [
-  { value: "opportunity", label: "Cơ hội" },
-  { value: "proposal-sent", label: "Đã gửi đề xuất" },
+  { value: "opportunity", label: "Tiềm năng" },
+  { value: "proposal-sent", label: "Đã gửi đề xuất báo giá" },
   { value: "in-negociation", label: "Đang thương lượng" },
   { value: "won", label: "Thu về" },
   { value: "lost", label: "Mất mát" },
