@@ -105,10 +105,10 @@ const DealShowContent = () => {
                 Ngân sách
               </span>
               <span className="text-sm">
-                {record.amount.toLocaleString("en-US", {
+                {record.amount.toLocaleString("vi-VN", {
                   notation: "compact",
                   style: "currency",
-                  currency: "USD",
+                  currency: "VND",
                   currencyDisplay: "narrowSymbol",
                   minimumSignificantDigits: 3,
                 })}
