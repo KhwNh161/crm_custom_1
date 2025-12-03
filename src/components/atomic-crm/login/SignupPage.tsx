@@ -106,7 +106,7 @@ export const SignupPage = () => {
             
             {/* Tên */}
             <div className="space-y-2 w-3/4">
-              <Label htmlFor="first_name" className="text-xs font-bold">Tên</Label>
+              <label htmlFor="first_name" className="text-xs font-bold text-black">Tên</label>
               <Input
                 {...register("first_name", { required: true })}
                 id="first_name"
@@ -119,7 +119,7 @@ export const SignupPage = () => {
 
             {/* Họ */}
             <div className="space-y-2 w-3/4">
-              <Label htmlFor="last_name" className="text-xs font-bold">Họ</Label>
+              <label htmlFor="last_name" className="text-xs font-bold text-black">Họ</label>
               <Input
                 {...register("last_name", { required: true })}
                 id="last_name"
@@ -132,7 +132,7 @@ export const SignupPage = () => {
             
             {/* Email */}
             <div className="space-y-2 w-3/4">
-              <Label htmlFor="email" className="text-xs font-bold">Địa chỉ Email</Label>
+              <label htmlFor="email" className="text-xs font-bold text-black">Địa chỉ Email</label>
               <Input
                 {...register("email", { required: true })}
                 id="email"
@@ -145,7 +145,7 @@ export const SignupPage = () => {
             
             {/* Mật khẩu */}
             <div className="space-y-2 w-3/4">
-              <Label htmlFor="password" className="text-xs font-bold">Mật khẩu</Label>
+              <label htmlFor="password" className="text-xs font-bold text-black">Mật khẩu</label>
               <Input
                 {...register("password", { required: true })}
                 id="password"

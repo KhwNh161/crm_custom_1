@@ -12,7 +12,7 @@ export const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false); 
   
   const login = useLogin();
-  const notify = useNotify();
+  const notify = useNotify(); 
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
