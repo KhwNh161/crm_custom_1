@@ -6,12 +6,16 @@ import {
   type CoreAdminProps,
   localStorageStore,
 } from "ra-core";
+import * as React from "react";
 import { i18nProvider as defaultI18nProvider } from "@/lib/i18nProvider";
 import { Layout } from "@/components/admin/layout";
 import { LoginPage } from "@/components/admin/login-page";
 import { Ready } from "@/components/admin/ready";
 import { ThemeProvider } from "@/components/admin/theme-provider";
 import { AuthCallback } from "@/components/admin/authentication";
+// ⬅️ ĐÃ THÊM: Import component Notification
+import { Notification } from "@/components/admin/notification"; 
+
 
 const defaultStore = localStorageStore();
 
@@ -80,6 +84,10 @@ export const Admin = (props: CoreAdminProps) => {
       >
         {children}
       </AdminUI>
+      
+      {/* VỊ TRÍ FIX LỖI: Đặt Notification ngay dưới AdminUI để nó bắt Context */}
+      <Notification />
+      
     </AdminContext>
   );
 };
