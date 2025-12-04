@@ -156,16 +156,14 @@ const vietnameseMessages = {
                 has_newsletter: 'Đăng ký nhận tin'
             }
         },
-        // ... (các phần companies, contacts, deals cũ giữ nguyên)
-
-        // THÊM ĐOẠN NÀY VÀO:
+   
         tasks: {
             name: 'Nhiệm vụ |||| Nhiệm vụ',
             fields: {
-                description: 'Mô tả nhiệm vụ', // Dịch trường Description
-                contact_id: 'Liên hệ',         // Dịch trường Contact
-                due_date: 'Hạn chót',          // Dịch trường Due date
-                type: 'Loại',                  // Dịch trường Type
+                description: 'Mô tả nhiệm vụ', 
+                contact_id: 'Liên hệ',         
+                due_date: 'Hạn chót',         
+                type: 'Loại',                  
             },
             
             data: {
