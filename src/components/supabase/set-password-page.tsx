@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { ValidateForm } from "ra-core";
 import { Form, required, useNotify, useTranslate } from "ra-core";
 import { useSetPassword, useSupabaseAccessToken } from "ra-supabase-core";
@@ -23,6 +23,16 @@ export const SetPasswordPage = () => {
   const notify = useNotify();
   const translate = useTranslate();
   const [, { mutateAsync: setPassword }] = useSetPassword();
+
+  // Debug: Log để kiểm tra tokens
+  useEffect(() => {
+    console.log("=== Set Password Debug ===");
+    console.log("Access Token:", access_token);
+    console.log("Access Token length:", access_token?.length);
+    console.log("Refresh Token:", refresh_token);
+    console.log("Refresh Token length:", refresh_token?.length);
+    console.log("Full URL:", window.location.href);
+  }, [access_token, refresh_token]);
 
   const validate = (values: FormData) => {
     if (values.password !== values.confirmPassword) {
