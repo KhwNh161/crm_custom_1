@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { useResetPassword } from "ra-supabase-core";
 import { Form, required, useNotify, useTranslate } from "ra-core";
 import type { FieldValues, SubmitHandler } from "react-hook-form";
 import { TextInput } from "@/components/admin/text-input";
 import { Button } from "@/components/ui/button";
 import { useConfigurationContext } from "@/components/atomic-crm/root/ConfigurationContext";
 import { Link } from "react-router-dom";
+import { supabase } from "@/components/atomic-crm/providers/supabase/supabase";
 
 interface FormData {
   email: string;
@@ -17,14 +17,19 @@ export const ForgotPasswordPage = () => {
 
   const notify = useNotify();
   const translate = useTranslate();
-  const [, { mutateAsync: resetPassword }] = useResetPassword();
 
   const submit = async (values: FormData) => {
     try {
       setLoading(true);
-      await resetPassword({
-        email: values.email,
+      
+      // Gọi trực tiếp Supabase API với redirectTo
+      const { error } = await supabase.auth.resetPasswordForEmail(values.email, {
+        redirectTo: `${window.location.origin}/#/set-password`,
       });
+
+      if (error) throw error;
+
+      notify("Email khôi phục mật khẩu đã được gửi!", { type: "success" });
     } catch (error: any) {
       notify(
         typeof error === "string"
@@ -52,18 +57,13 @@ export const ForgotPasswordPage = () => {
   return (
     <div className="fixed inset-0 z-50 w-screen h-screen bg-white lg:grid lg:grid-cols-[4fr_6fr] overflow-hidden">
       
-      {/* --- CỘT TRÁI: HÌNH ẢNH (4/10) --- */}
+      {/* CỘT TRÁI: HÌNH ẢNH */}
       <div className="hidden lg:flex relative h-full w-full flex-col bg-zinc-900 text-white p-6 justify-end">
-        {/* Hình nền */}
         <div 
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: "url('/img/signin.png')" }} 
         />
-        
-        {/* Lớp phủ gradient */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
-
-        {/* PHẦN CHỮ */}
         <div className="relative z-20 mb-0">
           <blockquote className="space-y-3">
             <p className="text-lg font-bold leading-tight shadow-black drop-shadow-lg">
@@ -79,10 +79,8 @@ export const ForgotPasswordPage = () => {
         </div>
       </div>
 
-      {/* --- CỘT PHẢI: LOGO & FORM QUÊN MẬT KHẨU (6/10) --- */}
+      {/* CỘT PHẢI: FORM */}
       <div className="flex flex-col h-full w-full bg-white text-black p-12 relative">
-        
-        {/* Logo góc trái trên */}
         <div className="absolute top-9 left-11">
           <img 
             className="h-7" 
