@@ -1,45 +1,56 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
-// Đảm bảo đường dẫn này đúng với cấu trúc thư mục của bạn
 import { supabaseAdmin } from '../_shared/supabaseAdmin.ts'
 
-console.log("Webhook Contact Listener is running!")
+console.log("Webhook Contact Listener (JSONB Version) is running!")
 
-// Thêm ': Request' để sửa lỗi implicit any
 serve(async (req: Request) => {
+  // 1. Chỉ nhận lệnh POST
   if (req.method !== 'POST') {
     return new Response('Method not allowed', { status: 405 })
   }
 
   try {
-    const secret = req.headers.get('x-api-secret')
-    // Sửa lỗi Deno đỏ bằng cách kệ nó, hoặc dùng Deno.env.get nếu server hiểu
-    const correctSecret = Deno.env.get('APP_TO_CRM_SECRET')
+    // 2. Nhận dữ liệu thô từ App (Google Login + Input SĐT)
+    const { email, first_name, last_name, phone, avatar_url } = await req.json()
 
-    if (!correctSecret || secret !== correctSecret) {
-      return new Response(JSON.stringify({ error: 'Sai mật khẩu kết nối (Secret)' }), { 
-        status: 401,
-        headers: { "Content-Type": "application/json" }
-      })
-    }
-
-    const { email, first_name, last_name, phone } = await req.json()
-
+    // Validate cơ bản
     if (!email) {
       return new Response(JSON.stringify({ error: 'Thiếu email' }), { status: 400 })
     }
 
+    // 3. Chuẩn bị dữ liệu theo đúng cấu trúc CRM yêu cầu (JSONB)
+    const newContact = {
+      first_name: first_name || 'Khach',
+      last_name: last_name || 'Moi',
+      gender: 'male', // Mặc định hoặc lấy từ Google nếu có
+      sales_id: 1,    // Gán mặc định cho Admin (ID=1) như mẫu bạn gửi
+      
+      // QUAN TRỌNG: Đóng gói vào mảng JSONB như CRM yêu cầu
+      email_jsonb: [
+        {
+          "type": "Work",
+          "email": email
+        }
+      ],
+      
+      phone_jsonb: phone ? [
+        {
+          "type": "Work",
+          "number": phone
+        }
+      ] : [], // Nếu không có sđt thì để mảng rỗng
+      
+
+      avatar: avatar_url ? { "src": avatar_url } : {},
+      
+      first_seen: new Date().toISOString(), // Đánh dấu thời gian tạo
+      tags: ['App Register'] // Gắn thẻ để biết khách này từ App chui ra
+    }
+
+    // 4. Ghi vào bảng CONTACTS
     const { data, error } = await supabaseAdmin
       .from('contacts')
-      .insert([
-        {
-          email: email,
-          first_name: first_name || '',
-          last_name: last_name || '',
-          phone_1_number: phone || '',
-          status: 'new',
-          sales_id: null // Để null chờ chia số
-        }
-      ])
+      .insert([newContact])
       .select()
 
     if (error) {
@@ -52,7 +63,7 @@ serve(async (req: Request) => {
       status: 200
     })
 
-  } catch (error: any) { // <-- QUAN TRỌNG: Thêm : any vào đây để sửa lỗi dòng 63
+  } catch (error: any) {
     return new Response(JSON.stringify({ error: error.message || String(error) }), {
       headers: { "Content-Type": "application/json" },
       status: 500
