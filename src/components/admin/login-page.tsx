@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useLogin, useNotify } from "ra-core";
+import { useLogin, useNotify, useSetLocale, useLocaleState } from "ra-core";
 import { Link } from "react-router-dom";
 import { useConfigurationContext } from "@/components/atomic-crm/root/ConfigurationContext";
 
@@ -10,11 +10,12 @@ export const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [language, setLanguage] = useState("vi");
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
   
   const login = useLogin();
   const notify = useNotify();
+  const setLocale = useSetLocale();
+  const [locale] = useLocaleState();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,11 +29,14 @@ export const LoginPage = () => {
   const languages = [
     { code: "vi", name: "Tiếng Việt (Việt Nam)", flag: "🇻🇳" },
     { code: "en", name: "English (US)", flag: "🇺🇸" },
-    { code: "ja", name: "日本語 (Japanese)", flag: "🇯🇵" },
-    { code: "zh", name: "中文 (Chinese)", flag: "🇨🇳" },
   ];
 
-  const currentLanguage = languages.find(lang => lang.code === language) || languages[0];
+  const currentLanguage = languages.find(lang => lang.code === locale) || languages[0];
+
+  const handleLanguageChange = (langCode: string) => {
+    setLocale(langCode);
+    setShowLanguageDropdown(false);
+  };
 
   return (
     <div className="fixed inset-0 z-50 w-screen h-screen bg-white lg:grid lg:grid-cols-[4fr_6fr] overflow-hidden">
@@ -97,18 +101,14 @@ export const LoginPage = () => {
                 {languages.map((lang) => (
                   <button
                     key={lang.code}
-                    onClick={() => {
-                      setLanguage(lang.code);
-                      setShowLanguageDropdown(false);
-                      // TODO: Thêm logic thay đổi ngôn ngữ thực tế ở đây
-                    }}
+                    onClick={() => handleLanguageChange(lang.code)}
                     className={`w-full flex items-center gap-3 px-4 py-2 hover:bg-gray-50 transition-colors text-left ${
-                      language === lang.code ? 'bg-gray-50' : ''
+                      locale === lang.code ? 'bg-gray-50' : ''
                     }`}
                   >
                     <span className="text-xl">{lang.flag}</span>
                     <span className="text-sm font-medium">{lang.name}</span>
-                    {language === lang.code && (
+                    {locale === lang.code && (
                       <svg className="w-4 h-4 ml-auto text-green-600" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                       </svg>
@@ -229,13 +229,6 @@ export const LoginPage = () => {
               `}</style>
             </button>
           </form>
-
-          <div className="text-center text-sm text-gray-500">
-            Chưa có tài khoản?{" "}
-            <Link to="/sign-up" className="font-bold text-sm text-black hover:underline">
-              Đăng ký ngay
-            </Link>
-          </div>
         </div>
       </div>
     </div>

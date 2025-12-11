@@ -11,7 +11,93 @@ const raSupabaseEnglishMessagesOverride = {
   },
 };
 
-// --- từ điển VI ---
+// English translations for custom resources
+const customEnglishMessages = {
+  resources: {
+    companies: {
+      name: 'Company |||| Companies',
+      fields: {
+        name: 'Company Name',
+        sector: 'Sector',
+        size: 'Size',
+        revenue: 'Revenue',
+        tax_identifier: 'Tax ID',
+        website: 'Website',
+        linkedin_url: 'LinkedIn',
+        phone_number: 'Phone Number',
+        address: 'Address',
+        city: 'City',
+        zipcode: 'Zip Code',
+        stateAbbr: 'State',
+        country: 'Country',
+        description: 'Description',
+        context_links: 'Links',
+        sales_id: 'Account Manager',
+        created_at: 'Created At',
+        nb_contacts: 'Number of Contacts',
+      }
+    },
+    contacts: {
+      name: 'Contact |||| Contacts',
+      fields: {
+        first_name: 'First Name',
+        last_name: 'Last Name',
+        last_seen: 'Last Seen',
+        gender: 'Gender',
+        title: 'Title',
+        company_id: 'Company',
+        email: 'Email',
+        phone_number1: 'Personal Phone',
+        phone_number2: 'Work Phone',
+        background: 'Background',
+        avatar: 'Avatar',
+        address: 'Address',
+        city: 'City',
+        zipcode: 'Zip Code',
+        stateAbbr: 'State',
+        country: 'Country',
+        sales_id: 'Account Manager',
+        companies: 'Company',
+        has_newsletter: 'Newsletter Subscription'
+      }
+    },
+    tasks: {
+      name: 'Task |||| Tasks',
+      fields: {
+        description: 'Task Description',
+        contact_id: 'Contact',
+        due_date: 'Due Date',
+        type: 'Type'
+      },
+      data: {
+        type: {
+          Email: 'Send Email',
+          Call: 'Call',
+          Meeting: 'Meeting',
+          Demo: 'Product Demo',
+          Lunch: 'Lunch',
+          None: 'Other / None',
+        }
+      }
+    },
+    deals: {
+      name: 'Deal |||| Deals',
+      fields: {
+        name: 'Deal Name',
+        budget: 'Budget',
+        company_id: 'Company',
+        contact_ids: 'Contacts',
+        stage: 'Stage',
+        type: 'Type',
+        description: 'Description',
+        amount: 'Amount',
+        expected_closing_date: 'Expected Closing Date'
+      }
+    }
+  }
+};
+
+// Vietnamese translations
 const vietnameseMessages = {
     ra: {
         action: {
@@ -49,7 +135,6 @@ const vietnameseMessages = {
             error: "Đã xảy ra lỗi",
         },
         sort: {
-            
             ASC: 'tăng dần',
             DESC: 'giảm dần',
             sort_by: 'Sắp xếp theo %{field} %{order}', 
@@ -101,12 +186,10 @@ const vietnameseMessages = {
         },
     },
     
-    // ---  ---
     resources: {
         companies: {
             name: 'Công ty |||| Công ty',
             fields: {
-                // Thông tin chung
                 name: 'Tên công ty',
                 sector: 'Lĩnh vực',
                 size: 'Quy mô',
@@ -115,15 +198,11 @@ const vietnameseMessages = {
                 website: 'Website',
                 linkedin_url: 'LinkedIn',
                 phone_number: 'Số điện thoại',
-                
-                
                 address: 'Địa chỉ',
                 city: 'Thành phố',
                 zipcode: 'Mã bưu chính',
                 stateAbbr: 'Tỉnh/Bang',
                 country: 'Quốc gia',
-                
-                
                 description: 'Mô tả',
                 context_links: 'Liên kết',
                 sales_id: 'Người phụ trách',
@@ -152,20 +231,17 @@ const vietnameseMessages = {
                 country: 'Quốc gia',
                 sales_id: 'Người phụ trách',
                 companies: 'Công ty',
-                
                 has_newsletter: 'Đăng ký nhận tin'
             }
         },
-   
         tasks: {
             name: 'Nhiệm vụ |||| Nhiệm vụ',
             fields: {
-                description: 'Mô tả nhiệm vụ', 
-                contact_id: 'Liên hệ',         
-                due_date: 'Hạn chót',         
-                type: 'Loại',                  
+                description: 'Mô tả nhiệm vụ',
+                contact_id: 'Liên hệ',
+                due_date: 'Hạn chót',
+                type: 'Loại'
             },
-            
             data: {
                 type: {
                     Email: 'Gửi Email',
@@ -178,9 +254,8 @@ const vietnameseMessages = {
             }
         },
         deals: {
-            name: 'giao dịch |||| giao dịch',
+            name: 'Giao dịch |||| Giao dịch',
             fields: {
-            
                 name: 'Tên giao dịch',
                 budget: 'Ngân sách',
                 company_id: 'Công ty',
@@ -189,24 +264,34 @@ const vietnameseMessages = {
                 type: 'Loại',
                 description: 'Mô tả',
                 amount: 'Giá trị',
-                expected_closing_date: 'Ngày chốt dự kiến',
-                
-                
+                expected_closing_date: 'Ngày chốt dự kiến'
             }
         }
     }
 };
 
 export const i18nProvider = polyglotI18nProvider(
-  () => {
+  (locale) => {
+    if (locale === 'vi') {
+      return mergeTranslations(
+        englishMessages,
+        raSupabaseEnglishMessages,
+        raSupabaseEnglishMessagesOverride,
+        vietnameseMessages
+      );
+    }
+    // English (default)
     return mergeTranslations(
       englishMessages,
       raSupabaseEnglishMessages,
       raSupabaseEnglishMessagesOverride,
-      vietnameseMessages 
+      customEnglishMessages
     );
   },
-  "en",
-  [{ locale: "en", name: "English" }], 
-  { allowMissing: true },
+  "vi", // Default language is Vietnamese
+  [
+    { locale: "en", name: "English" },
+    { locale: "vi", name: "Tiếng Việt" }
+  ],
+  { allowMissing: true }
 );
