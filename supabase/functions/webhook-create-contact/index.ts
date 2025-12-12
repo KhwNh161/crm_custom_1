@@ -10,7 +10,7 @@ serve(async (req: Request) => {
   }
 
   try {
-    // 2. Nhận dữ liệu (Bỏ avatar_url luôn cho gọn)
+    // 2. Lấy dữ liệu từ body
     const { email, first_name, last_name, phone } = await req.json()
 
     // Validate
@@ -24,6 +24,7 @@ serve(async (req: Request) => {
       last_name: last_name || 'Moi',
       gender: 'male',
       sales_id: 1, // ID của Admin hoặc Sale mặc định
+      
       
       // Cấu trúc JSONB chuẩn cho Email
       email_jsonb: [
@@ -44,8 +45,7 @@ serve(async (req: Request) => {
       first_seen: new Date().toISOString(),
       status: 'new'
       
-      // ĐÃ XÓA: avatar
-      // ĐÃ XÓA: tags (Để tránh lỗi bigint)
+      
     }
 
     // 4. Ghi vào DB
