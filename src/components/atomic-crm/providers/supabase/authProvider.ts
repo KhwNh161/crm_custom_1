@@ -54,6 +54,7 @@ export const authProvider: AuthProvider = {
       pathname === "/set-password" ||
       hash.includes("#/set-password") ||
       hash.includes("type=recovery") ||
+      hash.includes("#access_token=") ||   // THÊM DÒNG NÀY
       hash.includes("access_token=") ||
       hash.includes("error=access_denied");
     
