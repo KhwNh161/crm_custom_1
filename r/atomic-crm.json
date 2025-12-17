@@ -1,7 +1,6 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "atomic-crm",
-  "type": "registry:block",
   "title": "Miagent.io",
   "description": "A fully fledged CRM application built with Shadcn Admin Kit",
   "dependencies": [
@@ -853,5 +852,6 @@
       "content": "import { createContext, useContext } from \"react\";\n\n/**\n * A React context that provides access to a SimpleFormIterator data (the total number of items) and mutators (add, reorder and remove).\n * Useful to create custom array input iterators.\n * @deprecated Use SimpleFormIteratorContext from `ra-core` once available.\n * @see {SimpleFormIterator}\n * @see {ArrayInput}\n */\nexport const SimpleFormIteratorContext = createContext<\n  SimpleFormIteratorContextValue | undefined\n>(undefined);\n\n/**\n * @deprecated Use SimpleFormIteratorContextValue from `ra-core` once available.\n */\nexport type SimpleFormIteratorContextValue = {\n  add: (item?: any) => void;\n  remove: (index: number) => void;\n  reOrder: (index: number, newIndex: number) => void;\n  source: string;\n  total: number;\n};\n\n/**\n * @deprecated Use useSimpleFormIterator from `ra-core` once available.\n */\nexport const useSimpleFormIterator = () => {\n  const context = useContext(SimpleFormIteratorContext);\n  if (!context) {\n    throw new Error(\n      \"useSimpleFormIterator must be used inside a SimpleFormIterator\",\n    );\n  }\n  return context;\n};\n\n/**\n * A React context that provides access to a SimpleFormIterator item meta (its index and the total number of items) and mutators (reorder and remove this remove).\n * Useful to create custom array input iterators.\n * @deprecated Use SimpleFormIteratorItemContext from `ra-core` once available.\n * @see {SimpleFormIterator}\n * @see {ArrayInput}\n */\nexport const SimpleFormIteratorItemContext = createContext<\n  SimpleFormIteratorItemContextValue | undefined\n>(undefined);\n\n/**\n * @deprecated Use SimpleFormIteratorItemContextValue from `ra-core` once available.\n */\nexport type SimpleFormIteratorItemContextValue = {\n  index: number;\n  total: number;\n  remove: () => void;\n  reOrder: (newIndex: number) => void;\n};\n\n/**\n * @deprecated Use useSimpleFormIteratorItem from `ra-core` once available.\n */\nexport const useSimpleFormIteratorItem = () => {\n  const context = useContext(SimpleFormIteratorItemContext);\n  if (!context) {\n    throw new Error(\n      \"useSimpleFormIteratorItem must be used inside a SimpleFormIteratorItem\",\n    );\n  }\n  return context;\n};\n",
       "type": "registry:hook"
     }
-  ]
+  ],
+  "type": "registry:block"
 }
