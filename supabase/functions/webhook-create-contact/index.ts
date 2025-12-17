@@ -41,9 +41,15 @@ serve(async (req: Request) => {
           "number": phone
         }
       ] : [],
+
       
+      // bổ sung các trường khác
       first_seen: new Date().toISOString(),
-      status: 'new'
+      last_seen: new Date().toISOString(),
+      status: 'new',
+     
+       "tags": [2]
+
       
       
     }
