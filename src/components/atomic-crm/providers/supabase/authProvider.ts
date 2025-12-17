@@ -45,24 +45,34 @@ export const authProvider: AuthProvider = {
     return result;
   },
   checkAuth: async (params) => {
-    // Users are on the set-password page, nothing to do
-    if (
-      window.location.pathname === "/set-password" ||
-      window.location.hash.includes("#/set-password")
-    ) {
+    // Check if we're in a recovery/reset password flow
+    const hash = window.location.hash;
+    const pathname = window.location.pathname;
+    
+    // Allow access to set-password page with tokens or errors
+    const isPasswordRecovery = 
+      pathname === "/set-password" ||
+      hash.includes("#/set-password") ||
+      hash.includes("type=recovery") ||
+      hash.includes("access_token=") ||
+      hash.includes("error=access_denied");
+    
+    if (isPasswordRecovery) {
       return;
     }
+    
     // Users are on the forgot-password page, nothing to do
     if (
-      window.location.pathname === "/forgot-password" ||
-      window.location.hash.includes("#/forgot-password")
+      pathname === "/forgot-password" ||
+      hash.includes("#/forgot-password")
     ) {
       return;
     }
+    
     // Users are on the sign-up page, nothing to do
     if (
-      window.location.pathname === "/sign-up" ||
-      window.location.hash.includes("#/sign-up")
+      pathname === "/sign-up" ||
+      hash.includes("#/sign-up")
     ) {
       return;
     }

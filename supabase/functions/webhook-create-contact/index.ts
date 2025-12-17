@@ -46,7 +46,6 @@ serve(async (req: Request) => {
       // bổ sung các trường khác
       first_seen: new Date().toISOString(),
       last_seen: new Date().toISOString(),
-      status: 'new',
      
        "tags": [2]
 

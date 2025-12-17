@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import type { ValidateForm } from "ra-core";
 import { Form, required, useNotify, useTranslate } from "ra-core";
 import { useSetPassword, useSupabaseAccessToken } from "ra-supabase-core";
@@ -14,6 +15,7 @@ interface FormData {
 
 export const SetPasswordPage = () => {
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const access_token = useSupabaseAccessToken();
   const refresh_token = useSupabaseAccessToken({
@@ -24,15 +26,32 @@ export const SetPasswordPage = () => {
   const translate = useTranslate();
   const [, { mutateAsync: setPassword }] = useSetPassword();
 
-  // Debug: Log để kiểm tra tokens
+  // Debug và xử lý error
   useEffect(() => {
+    // Check for Supabase error in hash
+    const hash = window.location.hash;
+    const errorMatch = hash.match(/error=([^&]+)/);
+    const errorDescMatch = hash.match(/error_description=([^&]+)/);
+    
+    if (errorMatch && errorMatch[1] === 'access_denied') {
+      const description = errorDescMatch 
+        ? decodeURIComponent(errorDescMatch[1].replace(/\+/g, ' '))
+        : 'Link không hợp lệ';
+      
+      notify(`Link đặt lại mật khẩu đã hết hạn. ${description}`, { type: 'error' });
+      setTimeout(() => {
+        navigate('/forgot-password');
+      }, 3000);
+      return;
+    }
+
     console.log("=== Set Password Debug ===");
     console.log("Access Token:", access_token);
     console.log("Access Token length:", access_token?.length);
     console.log("Refresh Token:", refresh_token);
     console.log("Refresh Token length:", refresh_token?.length);
     console.log("Full URL:", window.location.href);
-  }, [access_token, refresh_token]);
+  }, [access_token, refresh_token, notify, navigate]);
 
   const validate = (values: FormData) => {
     if (values.password !== values.confirmPassword) {
@@ -63,6 +82,10 @@ export const SetPasswordPage = () => {
         refresh_token,
         password: values.password,
       });
+      notify("Đặt lại mật khẩu thành công!", { type: "success" });
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000);
     } catch (error: any) {
       notify(
         typeof error === "string"
